@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 """This module provides views to manage the contacts table."""
 
-from PyQt5.QtWidgets import (QAbstractItemView,QHBoxLayout, QMainWindow, QPushButton, QTableView, QVBoxLayout, QWidget,)
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import (QAbstractItemView,QDialog,QDialogButtonBox,QFormLayout,QHBoxLayout,QLineEdit, QMainWindow,QMessageBox, QPushButton, QTableView, QVBoxLayout, QWidget,)
+from .model import ContactsModel
 
 class Window(QMainWindow):
     """Main Window"""
@@ -14,12 +16,14 @@ class Window(QMainWindow):
         self.setCentralWidget(self.centralWidget)
         self.layout = QHBoxLayout()
         self.centralWidget.setLayout(self.layout)
+        self.contactsModel = ContactsModel()
         self.setupUI()
 
     def setupUI(self):
-        """ Setup the main window's GUI."""
+        """ Set up the main window's GUI."""
         # Create a table view widget
         self.table = QTableView()
+        self.table.setModel(self.contactsModel.model)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.resizeColumnsToContents()
         #Create buttons
@@ -34,3 +38,18 @@ class Window(QMainWindow):
         layout.addWidget(self.clearAllButton)
         self.layout.addWidget(self.table)
         self.layout.addLayout(layout)
+
+class AddDialog(QDialog):
+    """ Add contact dialog."""
+    def __init__(self, parent=None):
+        """Initializer"""
+        super(). __init__(parent=parent)
+        self.setWindowTitle("Add Contact")
+        self.layout=QVBoxLayout()
+        self.setLayout(self.layout)
+        self.data=None
+
+        self.setupUI()
+
+    def setupUI(self):
+        
