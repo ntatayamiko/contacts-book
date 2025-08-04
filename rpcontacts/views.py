@@ -52,4 +52,24 @@ class AddDialog(QDialog):
         self.setupUI()
 
     def setupUI(self):
-        
+        """Set up the add Contact dialog's GUI."""
+        #Create line edits for data fields
+        self.nameField = QLineEdit()
+        self.nameField.setObjectName("Name")
+        self.jobField = QLineEdit()
+        self.jobField.setObjectName("Job")
+        self.emailField = QLineEdit()
+        self.emailField.setObjectName("Email")
+        # Layout the data fields
+        layout = QFormLayout()
+        layout.addRow("Name:", self.nameField)
+        layout.addRow("Job:", self.jobField)
+        layout.addRow("Email:", self.emailField)
+        self.layout.addLayout(layout)
+        # Add standard buttons to the dialog and connect them
+        self.buttonsBox = QDialogButtonBox(self)
+        self.buttonsBox.setOriantation(Qt.Horizontal)
+        self.buttonsBox.setStandardButtons(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        self.buttonsBox.accepted.connect(self.accept)
+        self.buttonsBox.rejected.connect(self.reject)
+        self.layout.addWidget(self.buttonsBox)
