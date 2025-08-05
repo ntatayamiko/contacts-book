@@ -28,6 +28,7 @@ class Window(QMainWindow):
         self.table.resizeColumnsToContents()
         #Create buttons
         self.addButton = QPushButton("Add...")
+        self.addButton.clicked.connect(self.openAddDialog)
         self.deleteButton = QPushButton("Delete")
         self.clearAllButton = QPushButton("Clear All")
         #Lay out the GUI
@@ -38,6 +39,13 @@ class Window(QMainWindow):
         layout.addWidget(self.clearAllButton)
         self.layout.addWidget(self.table)
         self.layout.addLayout(layout)
+
+    def openAddDialog(self):
+        """Open the Add contact dialog."""
+        dialog = AddDialog(self)
+        if dialog.exec()==QDialog.accepted:
+            self.contactsModel.addContact(dialog.data)
+            self.table.resizeColumnsToContents()
 
 class AddDialog(QDialog):
     """ Add contact dialog."""
@@ -73,3 +81,14 @@ class AddDialog(QDialog):
         self.buttonsBox.accepted.connect(self.accept)
         self.buttonsBox.rejected.connect(self.reject)
         self.layout.addWidget(self.buttonsBox)
+
+    def accept(self):
+        """Accept the data provided through the dialog"""
+        self.data = []
+        for field in (self.nameField,self.jobField,self.emailField):
+            if not field.text():
+                QMessageBox.critical(self,"Error", f" You must provide a contact's {field.objectName()}",)
+                self.data=None #reset data
+                return
+            self.data.append(field.text())
+        super().accept()
