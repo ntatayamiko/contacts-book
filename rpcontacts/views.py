@@ -30,6 +30,7 @@ class Window(QMainWindow):
         self.addButton = QPushButton("Add...")
         self.addButton.clicked.connect(self.openAddDialog)
         self.deleteButton = QPushButton("Delete")
+        self.deleteButton.clicked.connect(self.deleteContact)
         self.clearAllButton = QPushButton("Clear All")
         #Lay out the GUI
         layout = QVBoxLayout()
@@ -39,6 +40,15 @@ class Window(QMainWindow):
         layout.addWidget(self.clearAllButton)
         self.layout.addWidget(self.table)
         self.layout.addLayout(layout)
+
+    def deleteContact(self):
+        """Delete the selected contact from the database."""
+        row = self.table.currentIndex().row()
+        if row < 0 :
+            return
+        messageBox = QMessageBox.warning(self, "Warning!","Do youwant to remove the selected contact?",QMessageBox. Ok | QMessageBox.Cancel,)
+        if messageBox == QMessageBox.Ok:
+            self.contactModel.deleteContact(row)
 
     def openAddDialog(self):
         """Open the Add contact dialog."""
