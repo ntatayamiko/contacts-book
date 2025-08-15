@@ -32,6 +32,7 @@ class Window(QMainWindow):
         self.deleteButton = QPushButton("Delete")
         self.deleteButton.clicked.connect(self.deleteContact)
         self.clearAllButton = QPushButton("Clear All")
+        self.clearAllButton.clicked.connect(self.clearContacts)
         #Lay out the GUI
         layout = QVBoxLayout()
         layout.addWidget(self.addButton)
@@ -41,12 +42,18 @@ class Window(QMainWindow):
         self.layout.addWidget(self.table)
         self.layout.addLayout(layout)
 
+    def clearContacts(self):
+        """Remove all contacts from the database."""
+        messageBox = QMessageBox.warning(self, "Warning", "Do you want to remove all your contacts", QMessageBox.Ok | QMessageBox.Cancel,)
+        if messageBox == QMessageBox.Ok:
+            self.contactsModel.clearContacts()
+
     def deleteContact(self):
         """Delete the selected contact from the database."""
         row = self.table.currentIndex().row()
         if row < 0 :
             return
-        messageBox = QMessageBox.warning(self, "Warning!","Do youwant to remove the selected contact?",QMessageBox. Ok | QMessageBox.Cancel,)
+        messageBox = QMessageBox.warning(self, "Warning!","Do you want to remove the selected contact?",QMessageBox. Ok | QMessageBox.Cancel,)
         if messageBox == QMessageBox.Ok:
             self.contactModel.deleteContact(row)
 
